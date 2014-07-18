@@ -54,8 +54,6 @@ other_dog_unicode = Recipe(Dog,
     owner = foreign_key(u('person'))
 )
 
-dummy_related_unique = Recipe
-
 dummy_unique_field = Recipe(DummyUniqueIntegerFieldModel,
     value = seq(10),
 )
