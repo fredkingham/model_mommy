@@ -39,7 +39,7 @@ class Recipe(object):
                 recipe_attrs = mommy.filter_rel_attrs(k, **a)
                 mapping[k] = v.recipe.make(**recipe_attrs)
             elif isinstance(v, related):
-                mapping[k] = v.prepare()
+                mapping[k] = v.make()
         mapping.update(new_attrs)
         mapping.update(rel_fields_attrs)
         return mapping
@@ -97,10 +97,11 @@ class related(object):
             else:
                 raise TypeError('Not a recipe')
 
-    def prepare(self):
+    def make(self):
         """
             Django related manager saves related set.
-            No need to persist at first
+            We need to save immediately to 
+            preserve iterators
         """
-        return [m.prepare() for m in self.related]
+        return [m.make() for m in self.related]
 

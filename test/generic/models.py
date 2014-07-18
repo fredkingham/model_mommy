@@ -212,6 +212,15 @@ class DummyUniqueIntegerFieldModel(models.Model):
     value = models.IntegerField(unique=True)
 
 
+class Cake(models.Model):
+    pass
+
+
+class Ingredient(models.Model):
+    amount = models.IntegerField()
+    food_type = models.CharField(max_length=20)
+    cake = models.ForeignKey(Cake, related_name="ingredients")
+
 if VERSION < (1, 4):
     class DummyIPAddressFieldModel(models.Model):
         ipv4_field = models.IPAddressField()  # Deprecated in Django 1.7

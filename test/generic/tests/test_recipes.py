@@ -9,7 +9,7 @@ from model_mommy import mommy
 from model_mommy.recipe import Recipe, foreign_key, RecipeForeignKey
 from model_mommy.timezone import now
 from model_mommy.exceptions import InvalidQuantityException, RecipeIteratorEmpty
-from test.generic.models import Person, DummyNumbersModel, DummyBlankFieldsModel, Dog
+from test.generic.models import Person, DummyNumbersModel, DummyBlankFieldsModel, Dog, Cake, Ingredient
 
 
 class TestDefiningRecipes(TestCase):
@@ -467,3 +467,11 @@ class TestIterators(TestCase):
         self.assertEqual(
             r.make().blank_text_field,
             "not an iterator, so don't iterate!")
+
+    def test_related_iterators(self):
+        cake = mommy.make_recipe('test.generic.cake_recipe')
+        ingredients_amount = cake.ingredients.count()
+        i_amount = cake.ingredients.all().values_list("amount").distinct().count()
+        self.assertEqual(ingredients_amount, i_amount)
+        i_types = cake.ingredients.all().values_list("food_type").distinct().count()
+        self.assertEqual(ingredients_amount, i_amount)

@@ -3,9 +3,10 @@
 #ATTENTION: Recipes defined for testing purposes only
 from decimal import Decimal
 from model_mommy.recipe import Recipe, foreign_key, seq
+from itertools import cycle
 from model_mommy.recipe import related
 from model_mommy.timezone import now
-from test.generic.models import Person, Dog, DummyDefaultFieldsModel, DummyUniqueIntegerFieldModel
+from test.generic.models import Person, Dog, DummyDefaultFieldsModel, DummyUniqueIntegerFieldModel, Cake, Ingredient
 
 from six import u
 
@@ -53,10 +54,23 @@ other_dog_unicode = Recipe(Dog,
     owner = foreign_key(u('person'))
 )
 
+dummy_related_unique = Recipe
+
 dummy_unique_field = Recipe(DummyUniqueIntegerFieldModel,
     value = seq(10),
 )
 
 dog_lady = Recipe(Person,
     dog_set = related('dog', other_dog)
+)
+
+food_types = ["oranges", "lemons", "baking flower", "sugar"]
+
+ingredient_recipe = Recipe(Ingredient,
+    amount = seq(1),
+    food_type = cycle(food_types)
+)
+
+cake_recipe = Recipe(Cake,
+    ingredients=related(ingredient_recipe, ingredient_recipe, ingredient_recipe, ingredient_recipe)
 )
